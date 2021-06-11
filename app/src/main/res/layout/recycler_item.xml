@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="30dp">
+    <TextView
+        android:id = "@+id/label_time"
+        style="@style/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text = "@string/str_label_time"
+        android:layout_weight="1"/>
+    <TextView
+        android:id = "@+id/label_status"
+        style="@style/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text = "@string/str_label_state_detail"
+        android:layout_weight="1"/>
+    <TextView
+        android:id = "@+id/label_location"
+        style="@style/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text = "@string/str_label_location"
+        android:layout_weight="1"/>
+    <TextView
+        android:id = "@+id/label_description"
+        style="@style/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text = "@string/str_label_description"
+        android:layout_weight="1"/>
+</LinearLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MyDelivery</string>
+    <string name="str_edit_input">송장번호를 입력하세요</string>
+    <string name="str_button_ok">확인</string>
+    <string name="str_label_delivery_number">운송장번호</string>
+    <string name="str_label_from">보내는 분</string>
+    <string name="str_label_to">받는 분</string>
+    <string name="str_label_state">배송 상태</string>
+    <string name="str_label_time">처리 시간</string>
+    <string name="str_label_state_detail">구분</string>
+    <string name="str_label_location">처리 지점</string>
+    <string name="str_label_description">상품 상태</string>
+</resources>
