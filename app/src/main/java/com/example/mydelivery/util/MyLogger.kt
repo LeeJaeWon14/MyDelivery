@@ -27,6 +27,12 @@ class MyLogger {
             Log.e(TAG, buildLogMsg(message))
         }
 
+        /**
+         * @author 이재원
+         * @param message -> input showing message
+         * @link MainActivity.kt
+         *
+         */
         fun buildLogMsg(message : String) : String {
             val ste = Thread.currentThread().stackTrace[4]
             val sb = StringBuilder()

@@ -1,22 +1,20 @@
 package com.example.mydelivery
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mydelivery.adapter.MyRecyclerAdapter
 import com.example.mydelivery.databinding.ActivityMainBinding
-import com.example.mydelivery.databinding.SharedLayoutBinding
 import com.example.mydelivery.dto.CarrierDTO
 import com.example.mydelivery.dto.TrackerDTO
 import com.example.mydelivery.model.NetworkConstants
 import com.example.mydelivery.util.MyLogger
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,14 +38,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        when (intent.action) {
-            Intent.ACTION_SEND -> {
-                if("text/plain" == intent.type) {
-                    handleSendText(intent)
-                }
-            }
-        }
-
         binding.btnInputOk.setOnLongClickListener {
             binding.edtInput.setText("640818406945")
             false
@@ -55,6 +45,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         getCarriers() //with initSpinner()
         binding.btnInputOk.setOnClickListener(showTrackListener)
+
+        when (intent.action) {
+            Intent.ACTION_SEND -> {
+                if("text/plain" == intent.type) {
+                    handleSendText(intent)
+                }
+            }
+        }
     }
 
     private fun initRetrofit() : DeliveryService {
@@ -100,6 +98,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             override fun onResponse(call: Call<TrackerDTO>, response: Response<TrackerDTO>) {
                 MyLogger.i(response.body().toString())
+                if(response.body() == null) {
+                    Snackbar.make(binding.btnInputOk, "송장번호를 다시 확인해주세요", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
                 runOnUiThread(Runnable {
                     initRecycler(response.body()!!)
                 })
@@ -136,6 +138,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private val showTrackListener = View.OnClickListener {
+        if(binding.edtInput.text.toString() == "") {
+            Snackbar.make(it, "송장번호를 다시 확인해주세요", Snackbar.LENGTH_SHORT).show()
+            return@OnClickListener
+        }
         companyInfo["number"] = binding.edtInput.text.toString().trim()
         deliveryTracking(companyInfo["name"]!!, companyInfo["number"]!!)
 
@@ -151,6 +157,54 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         intent.getStringExtra(Intent.EXTRA_TEXT).let {
             binding.edtInput.setText(it)
             isShared = true
+
+            val nameList = arrayListOf<String>()
+            val request = initRetrofit().getCarriers()
+            CoroutineScope(Dispatchers.IO).launch {
+                request.enqueue(object : Callback<List<CarrierDTO>> {
+                    override fun onResponse(
+                        call: Call<List<CarrierDTO>>,
+                        response: Response<List<CarrierDTO>>) {
+                        for(dto in response.body()!!) {
+                            nameList.add(dto.name)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<CarrierDTO>>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+                })
+            }
+            //못 가져온다 ..
+//            MyLogger.i("company alive? >> ${binding.spCarrier.adapter.getItem(0)}")
+        }
+
+    }
+
+    private fun checkDelivNumber(number : String) {
+        var list : ArrayList<String>? = null
+        when(number.length) {
+            9 -> {
+                list = arrayListOf("밀양", "경동", "합동", "USPS", "EMS")
+            }
+            10 -> {
+                list = arrayListOf("한진", "호남", "건영", "CU", "CVS", "한덱스", "USPS", "EMS", "DHL", "밀양")
+            }
+            11 -> {
+                list = arrayListOf("로젠", "밀양", "천일")
+            }
+            12 -> {
+                list = arrayListOf("Fedex", "한진", "롯데", "농협", "CU", "CVS", "대한통운")
+            }
+            13 -> {
+                list = arrayListOf("우체국", "대신")
+            }
+            14 -> {
+                list = arrayListOf("한덱스")
+            }
+            else -> {
+                Toast.makeText(this, "유효하지 않은 번호입니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
