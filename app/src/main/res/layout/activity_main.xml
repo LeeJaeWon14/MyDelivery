@@ -22,24 +22,30 @@
         android:hint = "@string/str_edit_input"
         android:textAlignment="center"
         android:textSize = "20dp" />
-    <LinearLayout
-        android:id = "@+id/ll_layout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id = "@+id/sl_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:visibility="invisible">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id = "@+id/rv_trackList"
+        android:layout_height="wrap_content" >
+        <LinearLayout
+            android:id = "@+id/ll_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
-        <Button
-            android:id = "@+id/btn_inputOk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text = "@string/str_button_ok"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:visibility="invisible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/rv_trackList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <Button
+                android:id = "@+id/btn_inputOk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "@string/str_button_ok"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

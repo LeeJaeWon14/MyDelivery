@@ -1,6 +1,7 @@
 package com.example.mydelivery
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -42,6 +43,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding.btnInputOk.setOnLongClickListener {
             binding.edtInput.setText("640818406945")
             false
+        }
+
+        binding.slLayout.setProgressBackgroundColorSchemeColor(getColor(R.color.purple_500))
+        binding.slLayout.setColorSchemeColors(Color.WHITE)
+        binding.slLayout.setOnRefreshListener {
+            showTracking()
+            Toast.makeText(this, "갱신되었습니다.", Toast.LENGTH_SHORT).show()
+            binding.slLayout.isRefreshing = false
         }
 
         getCarriers() //with initSpinner()
@@ -143,6 +152,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Snackbar.make(it, "송장번호를 다시 확인해주세요", Snackbar.LENGTH_SHORT).show()
             return@OnClickListener
         }
+        showTracking()
+    }
+    private fun showTracking() {
         companyInfo["number"] = binding.edtInput.text.toString().trim()
         deliveryTracking(companyInfo["name"]!!, companyInfo["number"]!!)
 
