@@ -3,6 +3,8 @@ package com.example.mydelivery
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -39,6 +41,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.toolbar.setBackgroundColor(Color.BLACK)
+        binding.toolbar.setTitleTextColor(Color.WHITE)
+        binding.toolbar.title = "배송조회"
+        setSupportActionBar(binding.toolbar)
 
         binding.btnInputOk.setOnLongClickListener {
             binding.edtInput.setText("640818406945")
@@ -188,8 +195,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     }
                 })
             }
-            //못 가져온다 ..
-//            MyLogger.i("company alive? >> ${binding.spCarrier.adapter.getItem(0)}")
         }
 
     }
@@ -219,5 +224,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(this, "유효하지 않은 번호입니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.more -> {
+                Toast.makeText(this, "will add recent record", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        return true
     }
 }

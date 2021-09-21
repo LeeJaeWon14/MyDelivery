@@ -6,46 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:padding = "20dp"
     android:gravity="center">
-
-    <Spinner
-        android:id = "@+id/sp_carrier"
+    <androidx.appcompat.widget.Toolbar
+        android:id = "@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"/>
-
-    <EditText
-        android:id = "@+id/edt_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint = "@string/str_edit_input"
-        android:textAlignment="center"
-        android:textSize = "20dp" />
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id = "@+id/sl_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        <LinearLayout
-            android:id = "@+id/ll_layout"
+        android:orientation="vertical"
+        android:padding = "20dp" >
+        <Spinner
+            android:id = "@+id/sp_carrier"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:visibility="invisible">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id = "@+id/rv_trackList"
+        <EditText
+            android:id = "@+id/edt_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint = "@string/str_edit_input"
+            android:textAlignment="center"
+            android:textSize = "20dp" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id = "@+id/sl_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id = "@+id/ll_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
-            <Button
-                android:id = "@+id/btn_inputOk"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text = "@string/str_button_ok"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:visibility="invisible">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/rv_trackList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <Button
+                    android:id = "@+id/btn_inputOk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text = "@string/str_button_ok"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </LinearLayout>
