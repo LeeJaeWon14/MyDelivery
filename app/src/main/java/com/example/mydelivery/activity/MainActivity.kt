@@ -1,4 +1,4 @@
-package com.example.mydelivery
+package com.example.mydelivery.activity
 
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mydelivery.DeliveryService
+import com.example.mydelivery.R
 import com.example.mydelivery.adapter.MyRecyclerAdapter
 import com.example.mydelivery.databinding.ActivityMainBinding
 import com.example.mydelivery.dto.CarrierDTO
@@ -42,8 +44,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.setBackgroundColor(Color.BLACK)
+        binding.toolbar.setBackgroundColor(getColor(R.color.purple_700))
         binding.toolbar.setTitleTextColor(Color.WHITE)
+        binding.toolbar.setSubtitleTextColor(Color.WHITE)
         binding.toolbar.title = "배송조회"
         setSupportActionBar(binding.toolbar)
 
@@ -120,6 +123,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     return
                 }
                 runOnUiThread(Runnable {
+                    MyLogger.i("response >> ${response.body()}")
                     initRecycler(response.body()!!)
                 })
             }
@@ -234,7 +238,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.more -> {
-                Toast.makeText(this, "will add recent record", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, RecentActivity::class.java))
             }
         }
 
