@@ -13,4 +13,6 @@
     <string name="str_sample_code">557914752856</string>
     <string name="str_update_done">갱신되었습니다</string>
     <string name="str_menu">최근 검색</string>
+    <string name="str_update_tracking">갱신되었습니다</string>
+    <string name="str_invalid_code">송장번호를 다시 확인해주세요</string>
 </resources>

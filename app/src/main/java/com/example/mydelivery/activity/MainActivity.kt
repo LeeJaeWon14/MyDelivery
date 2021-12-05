@@ -11,14 +11,13 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mydelivery.network.DeliveryService
 import com.example.mydelivery.R
 import com.example.mydelivery.adapter.MyRecyclerAdapter
 import com.example.mydelivery.databinding.ActivityMainBinding
+import com.example.mydelivery.network.DeliveryService
 import com.example.mydelivery.network.RetroClient
 import com.example.mydelivery.network.dto.CarrierDTO
 import com.example.mydelivery.network.dto.TrackerDTO
-import com.example.mydelivery.network.model.NetworkConstants
 import com.example.mydelivery.util.MyLogger
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -27,8 +26,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -60,14 +57,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 setColorSchemeColors(Color.WHITE)
                 setOnRefreshListener {
                     showTracking()
-                    Toast.makeText(this@MainActivity, "갱신되었습니다.", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.btnInputOk, getString(R.string.str_update_tracking), Snackbar.LENGTH_SHORT).show()
                     binding.slLayout.isRefreshing = false
                 }
             }
 
             btnInputOk.setOnClickListener {
                 if(binding.edtInput.text.toString() == "") {
-                    Snackbar.make(it, "송장번호를 다시 확인해주세요", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(it, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 showTracking()
@@ -85,16 +82,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun initRetrofit() : DeliveryService {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(NetworkConstants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(DeliveryService::class.java)
-    }
-
     private fun getCarriers() {
-        val request = initRetrofit().getCarriers()
+        val request = RetroClient.getInstance().create(DeliveryService::class.java).getCarriers()
 
         CoroutineScope(Dispatchers.IO).launch {
             request.enqueue(object : Callback<List<CarrierDTO>> {
@@ -123,34 +112,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
         val adapter = ArrayAdapter<String>(this, R.layout.spinner_item, nameList)
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        binding.spCarrier.adapter = adapter
-        binding.spCarrier.setSelection(0, false)
-
+        binding.spCarrier.apply {
+            this.adapter = adapter
+            setSelection(0, false)
+        }
         binding.spCarrier.onItemSelectedListener = this
-    }
-
-    private fun deliveryTracking(company : String, deliveryNumber : String) {
-        val request = initRetrofit().getTracker(company, deliveryNumber)
-
-        request.enqueue(object : Callback<TrackerDTO> {
-            override fun onFailure(call: Call<TrackerDTO>, t: Throwable) {
-                runOnUiThread(Runnable {
-                    Toast.makeText(this@MainActivity, "Response 실패", Toast.LENGTH_SHORT).show()
-                })
-                MyLogger.e(t.message.toString())
-            }
-
-            override fun onResponse(call: Call<TrackerDTO>, response: Response<TrackerDTO>) {
-                response.body()?.let {
-                    runOnUiThread(Runnable {
-                        MyLogger.i("response >> ${response.body()}")
-                        initRecycler(response.body()!!)
-                    })
-                } ?: run {
-                    Snackbar.make(binding.btnInputOk, "송장번호를 다시 확인해주세요", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        })
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -171,14 +137,28 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun showTracking() {
         companyInfo["number"] = binding.edtInput.text.toString().trim()
-        deliveryTracking(companyInfo["name"]!!, companyInfo["number"]!!)
+        val request = RetroClient.getInstance().create(DeliveryService::class.java).getTracker(companyInfo["name"]!!, companyInfo["number"]!!)
 
-        MyLogger.i("${companyInfo["name"]}, ${companyInfo["number"]}")
-    }
+        request.enqueue(object : Callback<TrackerDTO> {
+            override fun onFailure(call: Call<TrackerDTO>, t: Throwable) {
+                runOnUiThread(Runnable {
+                    Toast.makeText(this@MainActivity, "Response 실패", Toast.LENGTH_SHORT).show()
+                })
+                MyLogger.e(t.message.toString())
+            }
 
-    private fun initRecycler(trackerInfo : TrackerDTO) {
-        binding.rvTrackList.layoutManager = LinearLayoutManager(this)
-        binding.rvTrackList.adapter = MyRecyclerAdapter(trackerInfo.progresses)
+            override fun onResponse(call: Call<TrackerDTO>, response: Response<TrackerDTO>) {
+                response.body()?.let {
+                    runOnUiThread(Runnable {
+                        MyLogger.i("response >> ${response.body()}")
+                        binding.rvTrackList.layoutManager = LinearLayoutManager(this@MainActivity)
+                        binding.rvTrackList.adapter = MyRecyclerAdapter(response.body()!!.progresses)
+                    })
+                } ?: run {
+                    Snackbar.make(binding.btnInputOk, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun handleSendText(intent : Intent) {
@@ -247,5 +227,16 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
 
         return true
+    }
+
+    private var time : Long = 0
+    override fun onBackPressed() { //뒤로가기 클릭 시 종료 메소드
+        if(System.currentTimeMillis() - time >= 2000) {
+            time = System.currentTimeMillis()
+            Toast.makeText(this@MainActivity, "한번 더 누르면 종료합니다", Toast.LENGTH_SHORT).show()
+        }
+        else if(System.currentTimeMillis() - time < 2000) {
+            this.finishAffinity()
+        }
     }
 }
