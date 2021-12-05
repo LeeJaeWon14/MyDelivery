@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyDelivery" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MyDelivery" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -17,7 +17,8 @@
     <style name="label" >
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">15dp</item>
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/kblz</item>
     </style>
 </resources>

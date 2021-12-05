@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mydelivery.R
-import com.example.mydelivery.dto.ProgressDTO
+import com.example.mydelivery.network.dto.ProgressDTO
 
 class MyRecyclerAdapter(private val progresses : List<ProgressDTO>) : RecyclerView.Adapter<MyRecyclerAdapter.MyRecyclerHolder>() {
     class MyRecyclerHolder(view : View) : RecyclerView.ViewHolder(view) {
@@ -35,7 +35,5 @@ class MyRecyclerAdapter(private val progresses : List<ProgressDTO>) : RecyclerVi
         }
     }
 
-    private fun timePrettyPrint(time : String) : String {
-        return time.replace("T", "\n").split("+")[0]
-    }
+    private fun timePrettyPrint(time : String) : String = time.replace("T", "\n").split("+")[0]
 }

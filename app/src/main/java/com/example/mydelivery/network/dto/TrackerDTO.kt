@@ -1,4 +1,4 @@
-package com.example.mydelivery.dto
+package com.example.mydelivery.network.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class TrackerDTO(
     @SerializedName("from")
     @Expose
-    var from: InfoDTO ,
+    var from: InfoDTO,
 
     @SerializedName("to")
     var to: InfoDTO,

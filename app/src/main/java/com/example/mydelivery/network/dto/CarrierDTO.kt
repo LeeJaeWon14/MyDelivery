@@ -1,4 +1,4 @@
-package com.example.mydelivery.dto
+package com.example.mydelivery.network.dto
 import com.google.gson.annotations.SerializedName
 class CarrierDTO {
     @SerializedName("id")

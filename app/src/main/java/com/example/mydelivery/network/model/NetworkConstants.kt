@@ -1,4 +1,4 @@
-package com.example.mydelivery.model
+package com.example.mydelivery.network.model
 
 object NetworkConstants {
     const val BASE_URL : String = "https://apis.tracker.delivery/"
