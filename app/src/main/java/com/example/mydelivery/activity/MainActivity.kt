@@ -194,29 +194,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     }
 
-    private fun checkDelivNumber(number : String) {
+    private fun checkDeliveryNumber(number : String) {
         var list : ArrayList<String>? = null
-        when(number.length) {
-            9 -> {
-                list = arrayListOf("밀양", "경동", "합동", "USPS", "EMS")
-            }
-            10 -> {
-                list = arrayListOf("한진", "호남", "건영", "CU", "CVS", "한덱스", "USPS", "EMS", "DHL", "밀양")
-            }
-            11 -> {
-                list = arrayListOf("로젠", "밀양", "천일")
-            }
-            12 -> {
-                list = arrayListOf("Fedex", "한진", "롯데", "농협", "CU", "CVS", "대한통운")
-            }
-            13 -> {
-                list = arrayListOf("우체국", "대신")
-            }
-            14 -> {
-                list = arrayListOf("한덱스")
-            }
+        list = when(number.length) {
+            9 -> arrayListOf("밀양", "경동", "합동", "USPS", "EMS")
+            10 -> arrayListOf("한진", "호남", "건영", "CU", "CVS", "한덱스", "USPS", "EMS", "DHL", "밀양")
+            11 -> arrayListOf("로젠", "밀양", "천일")
+            12 -> arrayListOf("Fedex", "한진", "롯데", "농협", "CU", "CVS", "대한통운")
+            13 -> arrayListOf("우체국", "대신")
+            14 -> arrayListOf("한덱스")
             else -> {
                 Toast.makeText(this, "유효하지 않은 번호입니다.", Toast.LENGTH_SHORT).show()
+                null
             }
         }
     }
