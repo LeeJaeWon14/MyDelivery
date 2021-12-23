@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private val companyCodeList = ArrayList<String>()
     private val companyInfo = HashMap<String, String>()
     private var isShared = false
+    private lateinit var manager: InputMethodManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +69,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Snackbar.make(it, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
+                manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 showTracking()
             }
         }
+        manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         getCarriers() //with initSpinner()
 
@@ -125,7 +129,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         binding.apply {
-            llLayout.visibility = View.VISIBLE
+            slLayout.visibility = View.VISIBLE
             if(!isShared) edtInput.setText("")
             rvTrackList.adapter = null
         }
@@ -133,6 +137,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val code = companyCodeList[position]
         companyInfo["name"] = code
+
+        binding.edtInput.requestFocus()
+        manager.showSoftInput(binding.edtInput, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun showTracking() {

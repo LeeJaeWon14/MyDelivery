@@ -23,16 +23,14 @@ class MyRecyclerAdapter(private val progresses : List<ProgressDTO>) : RecyclerVi
     }
 
     override fun getItemCount(): Int {
-        return progresses.size +1
+        return progresses.size
     }
 
     override fun onBindViewHolder(holder: MyRecyclerHolder, position: Int) {
-        if(position > 0) {
-            holder.time.text = timePrettyPrint(progresses[position-1].time)
-            holder.status.text = progresses[position-1].status.text
-            holder.location.text = progresses[position-1].location.name
-            holder.description.text = progresses[position-1].description
-        }
+        holder.time.text = timePrettyPrint(progresses[position].time)
+        holder.status.text = progresses[position].status.text
+        holder.location.text = progresses[position].location.name
+        holder.description.text = progresses[position].description
     }
 
     private fun timePrettyPrint(time : String) : String = time.replace("T", "\n").split("+")[0]

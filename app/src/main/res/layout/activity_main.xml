@@ -13,16 +13,19 @@
         android:layout_height="wrap_content"
         app:title="@string/app_name"
         app:titleMarginStart="150dp"/>
+    <Spinner
+        android:id = "@+id/sp_carrier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding = "20dp" >
-        <Spinner
-            android:id = "@+id/sp_carrier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"/>
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
         <EditText
             android:id = "@+id/edt_input"
@@ -34,20 +37,47 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id = "@+id/sl_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
             <LinearLayout
                 android:id = "@+id/ll_layout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:visibility="gone">
-
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+                    <TextView
+                        style="@style/label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text = "@string/str_label_time"
+                        android:layout_weight="1"/>
+                    <TextView
+                        style="@style/label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text = "@string/str_label_state_detail"
+                        android:layout_weight="1"/>
+                    <TextView
+                        style="@style/label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text = "@string/str_label_location"
+                        android:layout_weight="1"/>
+                    <TextView
+                        style="@style/label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text = "@string/str_label_description"
+                        android:layout_weight="1"/>
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id = "@+id/rv_trackList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
                 <Button
                     android:id = "@+id/btn_inputOk"
                     android:layout_width="match_parent"
