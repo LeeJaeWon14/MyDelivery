@@ -27,8 +27,9 @@ class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerVi
             tvCompany.text = recentList[position].company
             tvNumber.text = recentList[position].trackNumber
             tvNumber.setOnClickListener {
+//                val bundle = Bundle().apply { putSerializable("entity", recentList[position]) }
                 val intent = Intent(itemView.context, MainActivity::class.java).apply {
-
+                    putExtra("recentEntity", recentList[position])
                 }
                 itemView.context.startActivity(intent)
             }

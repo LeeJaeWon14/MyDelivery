@@ -47,11 +47,16 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         actionBar?.hide()
         setSupportActionBar(binding.toolbar)
 
-        intent.getStringExtra("number")?.let {
+        (intent.getSerializableExtra("recentEntity") as? RecentEntity)?.let {
             binding.run {
-                edtInput.setText(it)
+                edtInput.setText(it.trackNumber)
                 slLayout.visibility = View.VISIBLE
-                btnInputOk.performClick()
+                companyInfo.apply {
+                    set("company", it.company)
+                    set("number", it.trackNumber)
+                }
+                MyLogger.e("map is ${companyInfo.toString()}")
+                showTracking()
             }
         }
 
