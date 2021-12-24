@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_recent_company"
+        style="@style/label"
+        tools:text="택배사" />
+    <TextView
+        android:id="@+id/tv_recent_number"
+        style="@style/label"
+        tools:text="송장번호" />
+</LinearLayout>

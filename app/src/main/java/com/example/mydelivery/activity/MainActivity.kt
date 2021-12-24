@@ -19,6 +19,8 @@ import com.example.mydelivery.network.DeliveryService
 import com.example.mydelivery.network.RetroClient
 import com.example.mydelivery.network.dto.CarrierDTO
 import com.example.mydelivery.network.dto.TrackerDTO
+import com.example.mydelivery.room.MyRoomDatabase
+import com.example.mydelivery.room.RecentEntity
 import com.example.mydelivery.util.MyLogger
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +46,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         actionBar?.hide()
         setSupportActionBar(binding.toolbar)
+
+        intent.getStringExtra("number")?.let {
+            binding.run {
+                edtInput.setText(it)
+                slLayout.visibility = View.VISIBLE
+                btnInputOk.performClick()
+            }
+        }
 
         // Views initialize
         binding.apply {
@@ -71,19 +81,23 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 showTracking()
+
+                // save to room
+                CoroutineScope(Dispatchers.IO).launch {
+                    val room = MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO()
+                    room.insertRecent(RecentEntity(
+                        0,
+                        companyInfo["name"]!!,
+                        companyInfo["number"]!!
+                    ))
+                }
             }
         }
         manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         getCarriers() //with initSpinner()
 
-        when (intent.action) {
-            Intent.ACTION_SEND -> {
-                if("text/plain" == intent.type) {
-                    handleSendText(intent)
-                }
-            }
-        }
+        sharedAction()
     }
 
     private fun getCarriers() {
@@ -168,30 +182,35 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
-    private fun handleSendText(intent : Intent) {
-        intent.getStringExtra(Intent.EXTRA_TEXT).let {
-            binding.edtInput.setText(it)
-            isShared = true
+    private fun sharedAction() {
+        when (intent.action) {
+            Intent.ACTION_SEND -> {
+                if("text/plain" == intent.type) {
+                    intent.getStringExtra(Intent.EXTRA_TEXT).let {
+                        binding.edtInput.setText(it)
+                        isShared = true
 
-            val nameList = arrayListOf<String>()
-            val request = RetroClient.getInstance().create(DeliveryService::class.java).getCarriers()
-            CoroutineScope(Dispatchers.IO).launch {
-                request.enqueue(object : Callback<List<CarrierDTO>> {
-                    override fun onResponse(
-                        call: Call<List<CarrierDTO>>,
-                        response: Response<List<CarrierDTO>>) {
-                        for(dto in response.body()!!) {
-                            nameList.add(dto.name)
+                        val nameList = arrayListOf<String>()
+                        val request = RetroClient.getInstance().create(DeliveryService::class.java).getCarriers()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            request.enqueue(object : Callback<List<CarrierDTO>> {
+                                override fun onResponse(
+                                    call: Call<List<CarrierDTO>>,
+                                    response: Response<List<CarrierDTO>>) {
+                                    for(dto in response.body()!!) {
+                                        nameList.add(dto.name)
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<List<CarrierDTO>>, t: Throwable) {
+                                    TODO("Not yet implemented")
+                                }
+                            })
                         }
                     }
-
-                    override fun onFailure(call: Call<List<CarrierDTO>>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-                })
+                }
             }
         }
-
     }
 
     private fun checkDeliveryNumber(number : String) {

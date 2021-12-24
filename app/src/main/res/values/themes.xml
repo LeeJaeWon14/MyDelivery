@@ -14,11 +14,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- This style must use to LinearLayout. -->
     <style name="label" >
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:fontFamily">@font/kblz</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
     </style>
 </resources>
