@@ -47,7 +47,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
                     <TextView
                         style="@style/label"
                         android:layout_width="0dp"
@@ -85,7 +86,7 @@
                     android:text = "@string/str_button_ok"
                     android:textStyle="bold"
                     android:fontFamily="@font/kblz"
-                    android:background="@drawable/button_ripple" />
+                    android:background="@drawable/ripple_unbound" />
             </LinearLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>

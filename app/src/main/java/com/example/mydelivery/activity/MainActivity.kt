@@ -30,6 +30,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.List
+import kotlin.collections.arrayListOf
+import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var binding : ActivityMainBinding
@@ -46,19 +49,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         actionBar?.hide()
         setSupportActionBar(binding.toolbar)
-
-        (intent.getSerializableExtra("recentEntity") as? RecentEntity)?.let {
-            binding.run {
-                edtInput.setText(it.trackNumber)
-                slLayout.visibility = View.VISIBLE
-                companyInfo.apply {
-                    set("company", it.company)
-                    set("number", it.trackNumber)
-                }
-                MyLogger.e("map is ${companyInfo.toString()}")
-                showTracking()
-            }
-        }
 
         // Views initialize
         binding.apply {
@@ -86,16 +76,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 showTracking()
-
-                // save to room
-                CoroutineScope(Dispatchers.IO).launch {
-                    val room = MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO()
-                    room.insertRecent(RecentEntity(
-                        0,
-                        companyInfo["name"]!!,
-                        companyInfo["number"]!!
-                    ))
-                }
             }
         }
         manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -140,6 +120,27 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             setSelection(0, false)
         }
         binding.spCarrier.onItemSelectedListener = this
+
+        (intent.getSerializableExtra("recentEntity") as? RecentEntity)?.let {
+            binding.run {
+                edtInput.setText(it.trackNumber)
+                slLayout.visibility = View.VISIBLE
+                companyInfo.apply {
+                    set("name", it.company)
+                    set("number", it.trackNumber)
+                }
+                MyLogger.e("map is ${companyInfo.toString()}")
+
+                run {
+                    for(idx in 0 until nameList.size) {
+                        if(nameList.get(idx).contains(companyInfo.get("name")!!)) {
+                            spCarrier.setSelection(idx)
+                        }
+                    }
+                }
+                showTracking()
+            }
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -180,6 +181,16 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         binding.rvTrackList.layoutManager = LinearLayoutManager(this@MainActivity)
                         binding.rvTrackList.adapter = MyRecyclerAdapter(response.body()!!.progresses)
                     })
+
+                    // save to room
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val room = MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO()
+                        room.insertRecent(RecentEntity(
+                            0,
+                            companyInfo["name"]!!,
+                            companyInfo["number"]!!
+                        ))
+                    }
                 } ?: run {
                     Snackbar.make(binding.btnInputOk, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
                 }
