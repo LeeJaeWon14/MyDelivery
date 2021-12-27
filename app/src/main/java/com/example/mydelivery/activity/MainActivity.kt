@@ -21,6 +21,7 @@ import com.example.mydelivery.network.dto.CarrierDTO
 import com.example.mydelivery.network.dto.TrackerDTO
 import com.example.mydelivery.room.MyRoomDatabase
 import com.example.mydelivery.room.RecentEntity
+import com.example.mydelivery.util.MyDateUtil
 import com.example.mydelivery.util.MyLogger
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -30,8 +31,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.List
-import kotlin.collections.arrayListOf
 import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -52,6 +51,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         // Views initialize
         binding.apply {
+            toolbar.title = MyDateUtil.getDate(MyDateUtil.HANGUEL)
             // create sample code
             btnInputOk.setOnLongClickListener {
                 edtInput.setText(getString(R.string.str_sample_code))
