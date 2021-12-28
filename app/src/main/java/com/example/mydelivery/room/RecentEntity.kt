@@ -8,9 +8,11 @@ import java.io.Serializable
 @Entity
 data class RecentEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    var id: Int = 0,
     @ColumnInfo(name = "company")
     var company: String,
     @ColumnInfo(name = "track_number")
-    var trackNumber: String
+    var trackNumber: String,
+    @ColumnInfo(name = "company_name")
+    var companyName: String
 ) : Serializable

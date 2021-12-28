@@ -14,8 +14,8 @@ import com.example.mydelivery.room.RecentEntity
 class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerView.Adapter<RecentListAdapter.RecentListHolder>() {
 //    private lateinit var context: Context
     class RecentListHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvCompany = view.findViewById<TextView>(R.id.tv_recent_company)
-        val tvNumber = view.findViewById<TextView>(R.id.tv_recent_number)
+        val tvCompany: TextView = view.findViewById(R.id.tv_recent_company)
+        val tvNumber: TextView = view.findViewById(R.id.tv_recent_number)
         val llRecentLayout: LinearLayout = view.findViewById(R.id.ll_recent_item)
     }
 
@@ -26,7 +26,7 @@ class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerVi
 
     override fun onBindViewHolder(holder: RecentListHolder, position: Int) {
         holder.apply {
-            tvCompany.text = getCompanyName(recentList[position].company)
+            tvCompany.text = getCompanyName(recentList[position].companyName)
             tvNumber.text = recentList[position].trackNumber
             llRecentLayout.setOnClickListener {
                 val intent = Intent(itemView.context, MainActivity::class.java).apply {

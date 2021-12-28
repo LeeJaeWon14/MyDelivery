@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [RecentEntity::class], version = 1, exportSchema = true)
+@Database(entities = [RecentEntity::class], version = 2, exportSchema = true)
 abstract class MyRoomDatabase : RoomDatabase() {
     abstract fun getRecentDAO() : RecentDAO
 
@@ -19,7 +19,8 @@ abstract class MyRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     MyRoomDatabase::class.java,
                     "recentRoom.db"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 return instance!!
             }
         }
