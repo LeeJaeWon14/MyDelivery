@@ -49,9 +49,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        actionBar?.hide()
-        setSupportActionBar(binding.toolbar)
-
         initUi()
 
         // init keyboard manager
@@ -64,7 +61,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun initUi() {
         // Views initialize
         binding.apply {
-            toolbar.title = MyDateUtil.getDate(MyDateUtil.HANGUEL)
+            actionBar?.hide()
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            tvToolbarTitle.text = MyDateUtil.getDate(MyDateUtil.HANGUEL)
+
             // create sample code
             btnInputOk.setOnLongClickListener {
                 val sampleList = arrayOf("309247673652", getString(R.string.str_sample_code), "645412692946")
