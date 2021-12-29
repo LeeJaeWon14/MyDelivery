@@ -11,8 +11,7 @@
         android:id = "@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/app_name"
-        app:titleMarginStart="120dp" />
+        app:title="@string/app_name"/>
     <Spinner
         android:id = "@+id/sp_carrier"
         android:layout_width="match_parent"
