@@ -34,6 +34,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var binding : ActivityMainBinding
@@ -49,13 +50,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initUi()
-
         // init keyboard manager
         manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-//        getCarriers() //with initSpinner()
-        sharedAction()
+        initUi()
     }
 
     private fun initUi() {
@@ -94,7 +92,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             btnInputOk.setOnClickListener {
-                if(binding.edtInput.text.toString() == "") {
+                MyLogger.e("number is ${binding.edtInput.text.toString()} after performClick")
+                if(binding.edtInput.text.isEmpty()) {
                     Snackbar.make(it, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
@@ -135,10 +134,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     binding.spCarrier.apply {
                         this.adapter = adapter
                         setSelection(0, false)
+                        onItemSelectedListener = this@MainActivity
                     }
-                    binding.spCarrier.onItemSelectedListener = this@MainActivity
 
-                    // Call from RecentActivity
+                    // Started by RecentActivity
                     (intent.getSerializableExtra("recentEntity") as? RecentEntity)?.let {
                         isRecent = true
                         runOnUiThread {
@@ -156,6 +155,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             }
                         }
                     } ?: run { entity = RecentEntity(0, "", "", "") }
+
+                    sharedAction(nameList)
                 }
             })
         }
@@ -209,15 +210,54 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
 
-    private fun sharedAction() {
+    private fun sharedAction(nameList: ArrayList<String>) {
         when (intent.action) {
             Intent.ACTION_SEND -> {
                 if("text/plain" == intent.type) {
-                    intent.getStringExtra(Intent.EXTRA_TEXT).let {
+                    intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
                         binding.edtInput.setText(it)
+                        MyLogger.e("number is ${binding.edtInput.text.toString()} before performClick")
                         isShared = true
+
+                        val compList = checkDeliverNumber(it)
+//                        compList?.let {
+//
+//                        }
+                        AlertDialog.Builder(this)
+                            .setItems(compList?.toTypedArray(), object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    for(idx in nameList.indices) {
+                                        if(nameList[idx].contains(compList!![which])) {
+                                            binding.spCarrier.setSelection(idx)
+                                            break
+                                        }
+                                    }
+                                    binding.btnInputOk.performClick()
+                                }
+                            })
+                            .setNegativeButton("종료", object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    finishAffinity()
+                                }
+                            })
+                            .show()
                     }
                 }
+            }
+        }
+    }
+
+    private fun checkDeliverNumber(number : String) : ArrayList<String>? {
+        return when(number.length) {
+            9 -> { arrayListOf("밀양", "경동", "합동", "USPS", "EMS") }
+            10 -> { arrayListOf("한진", "호남", "건영", "CU", "CVS", "한덱스", "USPS", "EMS", "DHL", "밀양") }
+            11 -> { arrayListOf("로젠", "밀양", "천일") }
+            12 -> { arrayListOf("Fedex", "한진", "롯데", "농협", "CU", "CVS", "대한통운") }
+            13 -> { arrayListOf("우체국", "대신") }
+            14 -> { arrayListOf("한덱스") }
+            else -> {
+                Toast.makeText(this, "유효하지 않은 번호입니다.", Toast.LENGTH_SHORT).show()
+                null
             }
         }
     }
