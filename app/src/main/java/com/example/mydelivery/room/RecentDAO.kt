@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface RecentDAO {
-    @Query("SELECT DISTINCT * FROM RecentEntity")
+    @Query("SELECT * FROM RecentEntity")
     fun selectRecent() : List<RecentEntity>
 
     @Insert

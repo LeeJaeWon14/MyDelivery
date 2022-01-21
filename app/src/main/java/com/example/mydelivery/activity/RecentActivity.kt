@@ -40,7 +40,7 @@ class RecentActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 binding.apply {
                     rvRecent.layoutManager = LinearLayoutManager(this@RecentActivity)
-                    rvRecent.adapter = RecentListAdapter(recent)
+                    rvRecent.adapter = RecentListAdapter(recent.toMutableList())
                 }
             }
         }

@@ -64,22 +64,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             supportActionBar?.setDisplayShowTitleEnabled(false)
             tvToolbarTitle.text = MyDateUtil.getDate(MyDateUtil.HANGUEL)
 
-            // create sample code
-            btnInputOk.setOnLongClickListener {
-                val sampleList = arrayOf("309247673652", getString(R.string.str_sample_code), "645412692946")
-                AlertDialog.Builder(this@MainActivity)
-                    .setItems(sampleList, object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            edtInput.setText(sampleList[which])
-                        }
-                    })
-                    .setNegativeButton("취소", null)
-                    .setCancelable(false)
-                    .show()
-
-                false
-            }
-
             // SwipeRefreshLayout init
             slLayout.apply {
                 setProgressBackgroundColorSchemeColor(getColor(R.color.purple_500))

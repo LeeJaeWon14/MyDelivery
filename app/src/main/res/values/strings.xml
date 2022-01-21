@@ -1,7 +1,23 @@
 <resources>
     <string name="app_name">MyDelivery</string>
-    <string name="str_edit_input">송장번호를 입력하세요</string>
+    <string name="str_recent_activity">최근 검색 내역</string>
+
+    <!-- Dialog message -->
+    <string name="str_update_tracking">갱신되었습니다</string>
+    <string name="str_invalid_code">송장번호를 다시 확인해주세요</string>
+    <string name="str_remove_confirm">삭제하시겠습니까?</string>
+
+    <!-- label -->
     <string name="str_button_ok">확인</string>
+    <string name="str_remove_label">삭제</string>
+    <string name="str_dialog_cancel_label">취소</string>
+
+    <!-- menu -->
+    <string name="str_menu">최근 검색</string>
+    <string name="str_remove_all">전체 삭제</string>
+
+
+    <string name="str_edit_input">송장번호를 입력하세요</string>
     <string name="str_label_delivery_number">운송장번호</string>
     <string name="str_label_from">보내는 분</string>
     <string name="str_label_to">받는 분</string>
@@ -10,10 +26,4 @@
     <string name="str_label_state_detail">구분</string>
     <string name="str_label_location">처리 지점</string>
     <string name="str_label_description">상품 상태</string>
-    <string name="str_sample_code">557914752856</string>
-    <string name="str_menu">최근 검색</string>
-    <string name="str_update_tracking">갱신되었습니다</string>
-    <string name="str_invalid_code">송장번호를 다시 확인해주세요</string>
-    <string name="str_recent_activity">최근 검색 내역</string>
-    <string name="str_remove_all">전체 삭제</string>
 </resources>
