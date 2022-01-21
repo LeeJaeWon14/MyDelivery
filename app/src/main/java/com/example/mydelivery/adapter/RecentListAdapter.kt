@@ -26,7 +26,7 @@ class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerVi
 
     override fun onBindViewHolder(holder: RecentListHolder, position: Int) {
         holder.apply {
-            tvCompany.text = getCompanyName(recentList[position].companyName)
+            tvCompany.text = recentList[position].companyName
             tvNumber.text = recentList[position].trackNumber
             llRecentLayout.setOnClickListener {
                 val intent = Intent(itemView.context, MainActivity::class.java).apply {
@@ -34,7 +34,6 @@ class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerVi
                 }
                 itemView.context.startActivity(intent)
             }
-//            MyLogger.e("size is ${itemCount}, list size is ${recentList.size}")
         }
     }
 
@@ -42,5 +41,5 @@ class RecentListAdapter(private val recentList: List<RecentEntity>) : RecyclerVi
         return recentList.size
     }
 
-    private fun getCompanyName(name: String) : String = name.replace("kr.", "")
+//    private fun getCompanyName(name: String) : String = name.replace("kr.", "")
 }

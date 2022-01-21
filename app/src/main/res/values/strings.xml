@@ -14,4 +14,6 @@
     <string name="str_menu">최근 검색</string>
     <string name="str_update_tracking">갱신되었습니다</string>
     <string name="str_invalid_code">송장번호를 다시 확인해주세요</string>
+    <string name="str_recent_activity">최근 검색 내역</string>
+    <string name="str_remove_all">전체 삭제</string>
 </resources>
