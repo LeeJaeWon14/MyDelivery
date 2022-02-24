@@ -200,13 +200,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 if("text/plain" == intent.type) {
                     intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
                         binding.edtInput.setText(it)
-                        MyLogger.e("number is ${binding.edtInput.text.toString()} before performClick")
                         isShared = true
 
                         val compList = checkDeliverNumber(it)
-//                        compList?.let {
-//
-//                        }
                         AlertDialog.Builder(this)
                             .setItems(compList?.toTypedArray(), object : DialogInterface.OnClickListener {
                                 override fun onClick(dialog: DialogInterface?, which: Int) {
