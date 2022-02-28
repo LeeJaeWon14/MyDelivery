@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mydelivery.R
 import com.example.mydelivery.adapter.MyRecyclerAdapter
@@ -36,13 +35,14 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var binding : ActivityMainBinding
     private val companyCodeList = ArrayList<String>()
     private var isShared = false
     private var isRecent = false
     private lateinit var manager: InputMethodManager
     private var entity: RecentEntity? = null
+    private var isTry = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +76,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
 
             btnInputOk.setOnClickListener {
-                MyLogger.e("number is ${binding.edtInput.text.toString()} after performClick")
                 if(binding.edtInput.text.isEmpty()) {
                     Snackbar.make(it, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
                     return@setOnClickListener
@@ -90,7 +89,16 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun failureMessage(t: Throwable) {
-        runOnUiThread(Runnable { Toast.makeText(this@MainActivity, "Response 실패", Toast.LENGTH_SHORT).show() })
+        CoroutineScope(Dispatchers.Main).launch {
+            when(t.message) {
+                getString(R.string.str_not_connected_network_for_tracker) -> {
+                    Toast.makeText(this@MainActivity, getString(R.string.str_need_connect_network), Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(this@MainActivity, getString(R.string.str_unexpected_error_message), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         MyLogger.e(t.message.toString())
     }
 
@@ -101,7 +109,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // 하단에 UI 작업을 위해 동기처리
         CoroutineScope(Dispatchers.IO).launch {
             request.enqueue(object : Callback<List<CarrierDTO>> {
-                override fun onFailure(call: Call<List<CarrierDTO>>, t: Throwable) = failureMessage(t)
+                override fun onFailure(call: Call<List<CarrierDTO>>, t: Throwable) {
+                    // One more try Rest call when failed onFailure.
+                    if(!isTry) {
+                        call.clone().enqueue(this)
+                        isTry = true
+                    }
+                    else { failureMessage(t) }
+                }
 
                 override fun onResponse(
                     call: Call<List<CarrierDTO>>,

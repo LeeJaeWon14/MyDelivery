@@ -26,4 +26,9 @@
     <string name="str_label_state_detail">구분</string>
     <string name="str_label_location">처리 지점</string>
     <string name="str_label_description">상품 상태</string>
+
+    <string name="str_lost_network">네트워크와 연결이 끊어졌습니다.</string>
+    <string name="str_not_connected_network_for_tracker">Unable to resolve host "apis.tracker.delivery": No address associated with hostname</string>
+    <string name="str_need_connect_network">네트워크 연결이 필요합니다.</string>
+    <string name="str_unexpected_error_message">알수없는 에러입니다.</string>
 </resources>
