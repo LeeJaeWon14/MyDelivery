@@ -19,12 +19,19 @@ fun main() {
 
     val array = mutableListOf<Int>()
     while(true) {
-        val input = readLine()!!
-        if(input == "z") break
-        else array.add(input.toInt())
+        try {
+            val input = readLine()!!
+            if(input == "z") break
+            else array.add(input.toInt())
+        } catch (e: NumberFormatException) {
+            continue
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
-    array.sort()
-    array.forEach {
-        println(it)
+    val distArray = array.distinct().toMutableList()
+    distArray.sort()
+    distArray.forEach {
+        println("${array.indexOf(it)+1}번째 $it")
     }
 }
