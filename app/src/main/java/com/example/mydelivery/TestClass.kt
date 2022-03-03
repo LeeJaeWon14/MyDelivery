@@ -17,21 +17,21 @@ fun main() {
 //        println(it)
 //    }
 
-    val array = mutableListOf<Int>()
-    while(true) {
-        try {
-            val input = readLine()!!
-            if(input == "z") break
-            else array.add(input.toInt())
-        } catch (e: NumberFormatException) {
-            continue
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-    val distArray = array.distinct().toMutableList()
-    distArray.sort()
-    distArray.forEach {
-        println("${array.indexOf(it)+1}번째 $it")
-    }
+//    val array = mutableListOf<Int>()
+//    while(true) {
+//        try {
+//            val input = readLine()!!
+//            if(input == "z") break
+//            else array.add(input.toInt())
+//        } catch (e: NumberFormatException) {
+//            continue
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
+//    val distArray = array.distinct().toMutableList()
+//    distArray.sort()
+//    distArray.forEach {
+//        println("${array.indexOf(it)+1}번째 $it")
+//    }
 }
