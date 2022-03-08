@@ -81,11 +81,25 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     return@setOnClickListener
                 }
                 manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-                entity?.trackNumber = binding.edtInput.text.toString().trim()
+                try {
+                    val inputNumber: Int = binding.edtInput.text.toString().trim().toInt()
+                    entity?.trackNumber = inputNumber.toString()
+                } catch (e: NumberFormatException) {
+//                    Toast.makeText(this@MainActivity, getString(R.string.str_number_format_exception), Toast.LENGTH_SHORT).show()
+                    Snackbar.make(it, getString(R.string.str_number_format_exception), Snackbar.LENGTH_SHORT).show()
+                    requestInput()
+                    return@setOnClickListener
+                }
+
                 showTracking()
             }
         }
         initSpinner()
+    }
+
+    private fun requestInput() {
+        binding.edtInput.requestFocus()
+        manager.showSoftInput(binding.edtInput, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun failureMessage(t: Throwable) {
@@ -170,8 +184,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
             slLayout.visibility = View.VISIBLE
             if(!isShared && !isRecent) {
                 edtInput.setText("")
-                binding.edtInput.requestFocus()
-                manager.showSoftInput(binding.edtInput, InputMethodManager.SHOW_IMPLICIT)
+                requestInput()
             }
             rvTrackList.adapter = null
         }
@@ -204,6 +217,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     }
                 } ?: run {
                     Snackbar.make(binding.btnInputOk, getString(R.string.str_invalid_code), Snackbar.LENGTH_SHORT).show()
+                    requestInput()
                 }
             }
         })

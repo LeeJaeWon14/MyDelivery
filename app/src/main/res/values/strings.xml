@@ -31,4 +31,5 @@
     <string name="str_not_connected_network_for_tracker">Unable to resolve host "apis.tracker.delivery": No address associated with hostname</string>
     <string name="str_need_connect_network">네트워크 연결이 필요합니다.</string>
     <string name="str_unexpected_error_message">알수없는 에러입니다.</string>
+    <string name="str_number_format_exception">숫자만 입력해주세요</string>
 </resources>
