@@ -24,7 +24,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
         <Spinner
             android:id = "@+id/sp_carrier"
             android:layout_width="0dp"
@@ -56,16 +57,17 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             tools:visibility="visible">
-            <LinearLayout
-                android:id = "@+id/ll_layout"
+            <RelativeLayout
+                android:id = "@+id/rl_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
                 <LinearLayout
+                    android:id="@+id/ll_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentTop="true">
                     <TextView
                         style="@style/label"
                         android:layout_width="0dp"
@@ -94,8 +96,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id = "@+id/rv_trackList"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ll_label"/>
                 <Button
                     android:id = "@+id/btn_inputOk"
                     android:layout_width="match_parent"
@@ -104,8 +106,9 @@
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:fontFamily="@font/kblz"
-                    android:background="@drawable/button_ripple" />
-            </LinearLayout>
+                    android:background="@drawable/button_ripple"
+                    android:layout_alignBottom="@id/rv_trackList"/>
+            </RelativeLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </LinearLayout>

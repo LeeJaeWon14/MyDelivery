@@ -82,7 +82,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                 }
                 manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 try {
-                    val inputNumber: Int = binding.edtInput.text.toString().trim().toInt()
+                    val inputNumber: Long = binding.edtInput.text.toString().trim().toLong()
                     entity?.trackNumber = inputNumber.toString()
                 } catch (e: NumberFormatException) {
 //                    Toast.makeText(this@MainActivity, getString(R.string.str_number_format_exception), Toast.LENGTH_SHORT).show()
@@ -204,15 +204,18 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                 response.body()?.let {
                     runOnUiThread(Runnable {
                         binding.rvTrackList.layoutManager = LinearLayoutManager(this@MainActivity)
-                        binding.rvTrackList.adapter = MyRecyclerAdapter(response.body()!!.progresses)
+                        binding.rvTrackList.adapter = MyRecyclerAdapter(it.progresses)
                     })
 
                     // save to room
                     CoroutineScope(Dispatchers.IO).launch {
                         // Exist record is ignore.
                         try {
-                            val room = MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO()
-                            room.insertRecent(entity!!)
+                            val list = MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO().distinctCheck(entity?.trackNumber!!)
+                            if(list.isEmpty()) {
+                                MyRoomDatabase.getInstance(this@MainActivity).getRecentDAO()
+                                    .insertRecent(entity!!)
+                            }
                         } catch (e: SQLiteConstraintException) { }
                     }
                 } ?: run {

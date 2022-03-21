@@ -18,4 +18,7 @@ interface RecentDAO {
 
     @Query("DELETE FROM RecentEntity")
     fun removeAll()
+
+    @Query("SELECT * FROM RecentEntity WHERE track_number = :trackNumber")
+    fun distinctCheck(trackNumber: String) : List<RecentEntity>
 }
