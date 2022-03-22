@@ -1,5 +1,6 @@
 package com.example.mydelivery.activity
 
+import android.app.ActivityOptions
 import android.content.DialogInterface
 import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
@@ -281,7 +282,10 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.more -> startActivity(Intent(this, RecentActivity::class.java))
+            R.id.more -> startActivity(
+                Intent(this, RecentActivity::class.java),
+                ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+            )
         }
 
         return true

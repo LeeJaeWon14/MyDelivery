@@ -2,9 +2,8 @@ package com.example.mydelivery.activity
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.transition.Slide
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +19,11 @@ import kotlinx.coroutines.withContext
 class RecentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecentBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        with(window) {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            enterTransition = Slide(Gravity.END)
+            exitTransition = Slide(Gravity.START)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityRecentBinding.inflate(layoutInflater)
         setContentView(binding.root)
